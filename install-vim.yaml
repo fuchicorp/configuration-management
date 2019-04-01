@@ -1,12 +1,11 @@
 ---
- - name: Install vim
-   hosts: all
-   become: yes
-   become_method: sudo
-   gather_facts: no
-   tasks:
-      - name: Install vim on Centos 7
-        when: ansible_distribution == "CentOS" 
-        yum: 
-          name: vim
-          state: present
+- name: Install Apache WebServer
+  hosts: all
+  become: yes
+  become_method: sudo
+  tasks: 
+    - name: install apache
+      yum:
+        name: apache2
+        state: present
+      when: ansible_distribution == "CentOS"
