@@ -1,8 +1,6 @@
 ---
 - name: Installing pkg Ubuntu only
   hosts: all
-  connection: local
-  user: ubuntu
   gather_facts: no 
   tasks:
     - name: install apache on ubuntu systems
