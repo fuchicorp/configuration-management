@@ -6,6 +6,6 @@
   tasks: 
     - name: install apache
       yum:
-        name: apache2
+        name: httpd
         state: present
       when: ansible_distribution == "CentOS"
