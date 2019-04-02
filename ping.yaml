@@ -3,7 +3,6 @@
   become: yes
   remote_user: admin
   tasks: 
-    - name: Ping Linux
+    - name: Ping 
       ping:
-    - name: Ping Windows
-      win_ping:
+    
