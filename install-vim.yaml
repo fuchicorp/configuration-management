@@ -2,10 +2,11 @@
 - name: Install Apache WebServer
   hosts: all
   become: yes
-  become_method: sudo
+  remote_user: ubuntu
   tasks: 
     - name: install apache
+      when: ansible_distribution == "Ubuntu"
       yum:
         name: httpd
         state: present
-      when: ansible_distribution == "CentOS"
+      

@@ -2,7 +2,7 @@
 - name: Install Apache WebServer
   hosts: all
   become: yes
-  become_method: sudo
+  : sudo
   tasks: 
     - name: install apache
       apt:
