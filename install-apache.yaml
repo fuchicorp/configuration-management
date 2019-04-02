@@ -2,10 +2,10 @@
 - name: Install Apache WebServer
   hosts: all
   become: yes
-  remote_user: ubuntu
+  remote_user: centos
   tasks: 
     - name: install apache
-      when: ansible_distribution == "Ubuntu"
+      when: ansible_distribution == "CentOS"
       yum:
         name: httpd
         state: present
