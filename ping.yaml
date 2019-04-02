@@ -3,6 +3,6 @@
   become: yes
   remote_user: admin
   tasks: 
-    - name: Ping 
+    - name: Ping Debian
       ping:
     
