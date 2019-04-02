@@ -4,8 +4,8 @@
   become: yes
   become_method: sudo
   tasks: 
-    - name: install apache
+    - name: install apache on Ubuntu
       apt:
         name: apache2
         state: present
-      when: ansible_distribution == "Ubuntu"
+      when: ansible_distribution == "Debian"
