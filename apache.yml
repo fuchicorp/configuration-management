@@ -2,10 +2,15 @@
 - name: Install Apache WebServer
   hosts: all
   become: yes
-  : sudo
+  remote_user: ubuntu
   tasks: 
     - name: install apache
+      when: ansible_distribution == "Ubuntu"
       apt:
         name: apache2
         state: present
-      when: ansible_distribution == "Ubuntu"
+    - name: run apache
+      systemd:
+        name: apache2
+        state: restarted
+        enabled: yes
