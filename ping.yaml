@@ -1,8 +1,8 @@
 ---
 - hosts: all
   become: yes
-  remote_user: admin
+  remote_user: ubuntu
   tasks: 
-    - name: Ping Debian
+    - name: Ping 
       ping:
     
