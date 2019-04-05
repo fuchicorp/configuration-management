@@ -2,4 +2,15 @@
 - name: searche for users that are not active for 90 days and disables them, backup of their home director
   hosts: all
   tasks:
-    - shell: lastlog -b 90 -u 1000- | awk '! /Never logged in/ {if (NR!=1) {print $1}}' | while read user; do chage -E0 $user; tar -czf /home/$user.tar.gz /home/$user; done
+    - shell: lastlog -b 90 -u 1000- | awk '! /Never logged in/ {if (NR!=1) {print $1}}'
+      register: users
+    - name: Disable user
+      user:
+        name: "{{item}}"
+        expires: 0
+      with_items: "{{users.stdout.splitlines()}}"
+    - name: Archive home folder
+      archive:
+        path: /home/{{item}}
+        dest: /home/{{item}}.tar.tgz
+      with_items: "{{users.stdout.splitlines()}}"
