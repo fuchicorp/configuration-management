@@ -1,6 +1,15 @@
+#On AWX before running the job-template make sure you will add variables under "EXTRA VARIABLES"
+#---
+#host: IP or name of the host    example: all or ipaddr or centos
+#port_line: Port ##              example: "Port 8875"
+#port: port number               example: "8875"
+#protocol: give protocol name    example: "TCP"
+
+#Make sure you have enabled option "PROMPT ON LAUNCH" of extra variables
+
 ---
 - name: ssh-port changing
-  hosts: all
+  hosts: "{{ host }}"                          #Please specify the host
   #gather_facts: no
   remote_user: root
   tasks:
@@ -8,17 +17,19 @@
     lineinfile:
       dest: "/etc/ssh/sshd_config"
       regexp: "^Port"
-      line: "Port 8875"
-   # notify: "Restart sshd"
+      line: "{{ port_line }}"                  #Please specify the port_line
+      #line: "Port 8875"
 
   - name: Setup selinux for alternate SSH port
     seport:
-      ports: "8875"
-      proto: "tcp"
+      ports: "{{ port }}"                      #Please provide port number which you wanna alternate the default 22
+      #ports: "8875"
+      proto: "{{ protocol }}"                  #Please provide protocol
+      #proto: "tcp"
       setype: "ssh_port_t"
       state: "present"
 
   - name: Restart sshd
     service:
-      name: sshd
+      name: sshd                               #This server need to be changed
       state: restarted
