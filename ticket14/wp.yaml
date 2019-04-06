@@ -1,6 +1,6 @@
 --- #t will ask to put input for e-link
   - name: unziping wordpress 
-    hosts: all
+    hosts: "{{ host_IP }}"
     become: yes
     become_method: sudo
     tasks:
