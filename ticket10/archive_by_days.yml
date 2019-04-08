@@ -1,3 +1,4 @@
+# Create a compressed archive of files in a specific folder that are older than the given number of days and save it inside a given folder
 # Please specify the following variables when prompted while launching the template   
 # source_folder: search for the files inside this folder, absolute path
 # dest_folder: destination folder for the archive to be saved

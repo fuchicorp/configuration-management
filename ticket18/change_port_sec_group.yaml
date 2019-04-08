@@ -1,0 +1,68 @@
+# Open port fo ssh connections, make appropriate changes to selinux, 
+# get the hosts security group on aws and add a rule that allows connections through that port
+# check the connection and displays the message
+# Tested on CentOS, Ubuntu. On Debian may complain that necessary python libraries are not installed
+# Please specify the following variables when prompted while launching the template   
+# host: ip address of the host 
+# port_num: port number that you want to open
+---
+- name: change ssh port, edit security group
+  hosts: "{{host}}"
+  tasks:
+    - name: Change ssh port on a given host
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        line: "{{item}}"
+      with_items:
+        - "Port {{port_num}}"
+        - "Port 22"
+
+    - name: allow sshd to listen on given tcp port
+      seport:
+        ports: "{{port_num}}"
+        proto: tcp
+        setype: ssh_port_t
+        state: present
+      ignore_errors: yes
+
+    - name: restart sshd
+      systemd:
+        name: sshd
+        state: restarted
+    
+    - name: Gathers facts (instance metadata) about remote hosts within ec2
+      ec2_metadata_facts:
+
+    - name: add a rule to a security group, that allows a connection through a given port
+      ec2_group:
+        name: "{{ansible_ec2_security_groups}}"
+        description: awx_host
+        region: "{{ansible_ec2_placement_region}}"
+        purge_rules: false
+        rules:
+          - proto: tcp
+            ports:
+              - "{{port_num}}"
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow all tcp on port 
+      delegate_to: localhost 
+    
+    - name: check if port is open
+      wait_for:
+        host: "{{host}}"
+        port: "{{port_num}}"
+        delay: 5
+        timeout: 15
+        msg: "Timeout waiting for ssh connection on a given port"
+      ignore_errors: yes
+      register: port_check
+
+    - name: print the error message if the port is not open
+      when: port_check.failed|bool
+      debug:
+        msg: "ssh connection to port port failed"
+
+    - name: print message saying that port was succeddfully opened
+      when: not port_check.failed|bool
+      debug:
+        msg: "ssh connection to port port succeeded"

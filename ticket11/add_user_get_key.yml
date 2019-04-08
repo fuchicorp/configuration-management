@@ -1,3 +1,4 @@
+# Adds a user, generates ssh key for the user and prints the public key
 # Please specify the following variables when prompted while launching the template   
 # user: username
 ---
