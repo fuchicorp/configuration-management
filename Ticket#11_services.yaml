@@ -1,0 +1,14 @@
+# Please specify following variables when prompted during lounch 
+# hosts: one of your instance public IP-Address from AWS or all
+# service: Service name (Example: httpd, network,...)
+# state: restarted, started, stopped, restarted 
+---
+- name: Manage service 
+  hosts: "{{host}}"
+  become: yes
+  become_method: sudo
+  tasks: 
+- name: Set the service 
+    systemd:
+      name: "{{service}}"
+      state: "{{state}}"

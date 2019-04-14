@@ -1,0 +1,11 @@
+---
+- name: Install Apache WebServer on Centos
+  hosts: all
+  become: yes
+  become_method: sudo
+  tasks: 
+    - name: install apache
+      apt:
+        name: apache2
+        state: present
+      when: ansible_distribution == "Centos"
